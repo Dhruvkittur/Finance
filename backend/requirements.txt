@@ -35,5 +35,6 @@ SQLAlchemy==2.0.35
 uvicorn[standard]==0.32.0
 xlsxwriter==3.2.0
 openpyxl==3.1.5
-streamlit>=1.38.0
+streamlit==1.39.0
+starlette==0.38.6
 plotly>=5.20.0
