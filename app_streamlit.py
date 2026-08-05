@@ -225,14 +225,17 @@ if st.session_state["active_page"] == "Dashboard":
 
     # Top KPI Metrics Row
     docs = sync_get_user_documents(user["id"])
+    total_chunks = sum(d.get("chunks_count", 0) for d in docs) if docs else 0
+    total_size_mb = sum(d.get("file_size_mb", 0) for d in docs) if docs else 0.0
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.markdown(
-            """
+            f"""
             <div class="metric-card">
-                <div class="metric-title">Portfolio Valuation</div>
-                <div class="metric-value">$42.8M</div>
-                <div class="metric-delta delta-up">▲ +8.4% vs last quarter</div>
+                <div class="metric-title">Documents Indexed</div>
+                <div class="metric-value">{len(docs)} Docs</div>
+                <div class="metric-delta delta-up">▲ Active Catalog</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -241,8 +244,8 @@ if st.session_state["active_page"] == "Dashboard":
         st.markdown(
             f"""
             <div class="metric-card">
-                <div class="metric-title">Documents Indexed</div>
-                <div class="metric-value">{len(docs)} Docs</div>
+                <div class="metric-title">Vector Chunks</div>
+                <div class="metric-value">{total_chunks:,}</div>
                 <div class="metric-delta delta-up">▲ 100% Vectorized</div>
             </div>
             """,
@@ -250,11 +253,11 @@ if st.session_state["active_page"] == "Dashboard":
         )
     with col3:
         st.markdown(
-            """
+            f"""
             <div class="metric-card">
-                <div class="metric-title">AI Confidence Score</div>
-                <div class="metric-value">98.2%</div>
-                <div class="metric-delta delta-up">▲ Zero Hallucination Audit</div>
+                <div class="metric-title">Document Storage</div>
+                <div class="metric-value">{total_size_mb:.2f} MB</div>
+                <div class="metric-delta delta-up">▲ Processed</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -273,53 +276,66 @@ if st.session_state["active_page"] == "Dashboard":
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Charts Row
+    # Dynamic Charts Row
     chart_col1, chart_col2 = st.columns([2, 1])
 
     with chart_col1:
         with st.container(border=True):
-            st.markdown("### 📈 Revenue & EBITDA Projection Trend (FY24-FY26)")
+            st.markdown("### 📊 Vector Chunks & Document Indexing Volume")
             
-            months = ["Q1 24", "Q2 24", "Q3 24", "Q4 24", "Q1 25 (E)", "Q2 25 (E)", "Q3 25 (E)", "Q4 25 (E)"]
-            revenue = [12.4, 13.8, 15.2, 17.1, 18.5, 20.2, 22.0, 24.5]
-            ebitda = [3.2, 3.8, 4.2, 5.1, 5.8, 6.4, 7.1, 8.0]
-            
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=months, y=revenue, name="Revenue ($M)", mode="lines+markers", line=dict(color="#3b82f6", width=3)))
-            fig.add_trace(go.Scatter(x=months, y=ebitda, name="EBITDA ($M)", mode="lines+markers", line=dict(color="#10b981", width=3, dash="dash")))
-            fig.update_layout(
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#94a3b8"),
-                margin=dict(l=20, r=20, t=20, b=20),
-                legend=dict(orientation="h", y=1.1),
-                xaxis=dict(gridcolor="rgba(255,255,255,0.05)"),
-                yaxis=dict(gridcolor="rgba(255,255,255,0.05)"),
-            )
-            st.plotly_chart(fig, use_container_width=True)
+            if docs:
+                doc_names = [d["original_filename"][:20] for d in docs]
+                chunks_counts = [d.get("chunks_count", 1) for d in docs]
+                
+                fig = go.Figure()
+                fig.add_trace(go.Bar(
+                    x=doc_names,
+                    y=chunks_counts,
+                    name="Vector Chunks",
+                    marker_color="#3b82f6"
+                ))
+                fig.update_layout(
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="#94a3b8"),
+                    margin=dict(l=20, r=20, t=20, b=20),
+                    xaxis=dict(gridcolor="rgba(255,255,255,0.05)", title="Uploaded Files"),
+                    yaxis=dict(gridcolor="rgba(255,255,255,0.05)", title="Chunk Count"),
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("Upload documents in 'Document Upload' to view live vector metrics.")
 
     with chart_col2:
         with st.container(border=True):
-            st.markdown("### 🎯 Asset Allocation")
+            st.markdown("### 🎯 Document Type Breakdown")
             
-            labels = ["Public Equities", "Private Credit", "Real Estate", "Venture Capital", "Treasuries"]
-            values = [35, 25, 20, 12, 8]
-            
-            fig_pie = px.pie(
-                names=labels,
-                values=values,
-                color_discrete_sequence=["#3b82f6", "#8b5cf6", "#ec4899", "#10b981", "#f59e0b"],
-                hole=0.5
-            )
-            fig_pie.update_layout(
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#94a3b8"),
-                margin=dict(l=10, r=10, t=10, b=10),
-                showlegend=True,
-                legend=dict(orientation="h", y=-0.1)
-            )
-            st.plotly_chart(fig_pie, use_container_width=True)
+            if docs:
+                types_dict = {}
+                for d in docs:
+                    t = (d.get("doc_type") or "pdf").upper()
+                    types_dict[t] = types_dict.get(t, 0) + 1
+                
+                labels = list(types_dict.keys())
+                values = list(types_dict.values())
+                
+                fig_pie = px.pie(
+                    names=labels,
+                    values=values,
+                    color_discrete_sequence=["#3b82f6", "#8b5cf6", "#ec4899", "#10b981", "#f59e0b"],
+                    hole=0.5
+                )
+                fig_pie.update_layout(
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="#94a3b8"),
+                    margin=dict(l=10, r=10, t=10, b=10),
+                    showlegend=True,
+                    legend=dict(orientation="h", y=-0.1)
+                )
+                st.plotly_chart(fig_pie, use_container_width=True)
+            else:
+                st.info("No files uploaded.")
 
     # Recent Activity & Agent Logs
     st.markdown("### ⚡ Live Multi-Agent Execution Log")
