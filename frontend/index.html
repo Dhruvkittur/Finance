@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+    
+    <!-- SEO -->
+    <title>FinPilot AI — Enterprise Multi-Agent Financial Intelligence Platform</title>
+    <meta name="description" content="FinPilot AI: Autonomous AI workforce for modern finance. 17 intelligent agents collaborate to analyze financial documents, detect fraud, ensure compliance, and generate insights in real-time." />
+    <meta name="keywords" content="financial AI, document intelligence, fraud detection, compliance, financial analysis, AI agents, LangGraph" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="FinPilot AI — Autonomous AI Workforce for Modern Finance" />
+    <meta property="og:description" content="Enterprise Multi-Agent Financial Intelligence Platform powered by Gemini 2.5 Flash" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <style>
+      /* Critical CSS: loading screen to prevent FOUC */
+      #root-loading {
+        position: fixed;
+        inset: 0;
+        background: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .loading-logo {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulse 2s ease-in-out infinite;
+        font-size: 28px;
+      }
+      .loading-text {
+        color: #94a3b8;
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+      }
+      .loading-bar {
+        width: 200px;
+        height: 2px;
+        background: #1e293b;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .loading-bar-inner {
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s linear infinite;
+        border-radius: 999px;
+      }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(59,130,246,0.4); }
+        50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(59,130,246,0.7); }
+      }
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div id="root-loading">
+      <div class="loading-logo">🤖</div>
+      <span class="loading-text">FINPILOT AI</span>
+      <div class="loading-bar">
+        <div class="loading-bar-inner"></div>
+      </div>
+    </div>
+
+    <!-- App Root -->
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Remove loading screen when app mounts
+      window.__removeLoadingScreen = function() {
+        const loader = document.getElementById('root-loading');
+        if (loader) {
+          loader.style.transition = 'opacity 0.4s ease';
+          loader.style.opacity = '0';
+          setTimeout(() => loader.remove(), 400);
+        }
+      };
+    </script>
+  </body>
+</html>

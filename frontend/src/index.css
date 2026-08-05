@@ -1,0 +1,434 @@
+/**
+ * FinPilot AI — Global CSS Design System
+ * ==========================================
+ * Includes:
+ * - CSS custom properties (design tokens)
+ * - Dark/Light mode
+ * - Typography scale
+ * - Component utilities
+ * - Glassmorphism effects
+ * - Scrollbar styling
+ * - Markdown rendering
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design Tokens ─────────────────────────────────────────────────────────── */
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;      /* #0f172a — deep navy */
+    --foreground: 210 40% 98%;      /* #f8fafc — near white */
+
+    --card: 217 33% 17%;            /* #1e293b — card surface */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;         /* #3b82f6 — electric blue */
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 22%;       /* #273549 — secondary surface */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 20%;
+    --muted-foreground: 215 20% 65%; /* #94a3b8 */
+
+    --accent: 270 76% 65%;          /* #8b5cf6 — violet accent */
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;       /* #ef4444 */
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 22%;
+    --input: 217 33% 22%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    /* FinPilot Brand */
+    --fp-blue: #3b82f6;
+    --fp-violet: #8b5cf6;
+    --fp-emerald: #10b981;
+    --fp-amber: #f59e0b;
+    --fp-red: #ef4444;
+    --fp-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    --fp-gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(59, 130, 246, 0.15);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Light Mode Override */
+  .light {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 270 76% 65%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(59, 130, 246, 0.2);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    @apply scroll-smooth;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ── Glassmorphism Components ──────────────────────────────────────────────── */
+
+@layer components {
+
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-card {
+    @apply glass rounded-xl p-6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.1);
+  }
+
+  /* ── Gradient Text ─────────────────────────────────────────────────────────── */
+
+  .gradient-text {
+    background: var(--fp-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-hero {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Glow Effects ─────────────────────────────────────────────────────────── */
+
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4),
+                0 0 40px rgba(59, 130, 246, 0.15);
+  }
+
+  .glow-violet {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4),
+                0 0 40px rgba(139, 92, 246, 0.15);
+  }
+
+  .glow-emerald {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4),
+                0 0 40px rgba(16, 185, 129, 0.15);
+  }
+
+  /* ── KPI Cards ────────────────────────────────────────────────────────────── */
+
+  .kpi-card {
+    @apply glass-card relative overflow-hidden cursor-default;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--fp-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .kpi-card:hover::before {
+    opacity: 1;
+  }
+
+  /* ── Sidebar ──────────────────────────────────────────────────────────────── */
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground
+           transition-all duration-150 cursor-pointer select-none;
+  }
+
+  .sidebar-item:hover {
+    @apply bg-secondary text-foreground;
+  }
+
+  .sidebar-item.active {
+    @apply bg-primary/15 text-primary font-medium;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  /* ── Chat Bubbles ─────────────────────────────────────────────────────────── */
+
+  .chat-bubble-user {
+    @apply bg-primary text-primary-foreground rounded-2xl rounded-br-sm px-4 py-3 max-w-2xl ml-auto;
+  }
+
+  .chat-bubble-assistant {
+    @apply glass rounded-2xl rounded-bl-sm px-4 py-3 max-w-4xl;
+  }
+
+  /* ── Agent Step Badge ────────────────────────────────────────────────────── */
+
+  .agent-badge {
+    @apply inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+  }
+
+  /* ── Status Badges ────────────────────────────────────────────────────────── */
+
+  .status-badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .status-badge.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #10b981;
+  }
+
+  .status-badge.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+  }
+
+  .status-badge.danger {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+
+  .status-badge.info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+  }
+
+  /* ── Grid Background ─────────────────────────────────────────────────────── */
+
+  .bg-grid {
+    background-image: linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* ── Typing Indicator ────────────────────────────────────────────────────── */
+
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b82f6;
+    animation: typing-bounce 1.4s ease-in-out infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-8px); opacity: 1; }
+  }
+
+  /* ── Progress Bar ────────────────────────────────────────────────────────── */
+
+  .progress-bar {
+    @apply h-1.5 rounded-full overflow-hidden bg-secondary;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-700 ease-out;
+    background: var(--fp-gradient);
+  }
+
+  /* ── Shimmer Loading ─────────────────────────────────────────────────────── */
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.04) 50%,
+      rgba(255,255,255,0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* ── Scrollbar ───────────────────────────────────────────────────────────── */
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.3);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.5);
+  }
+
+  /* ── Markdown Prose ──────────────────────────────────────────────────────── */
+
+  .prose-finpilot {
+    @apply text-sm leading-relaxed text-foreground;
+  }
+
+  .prose-finpilot h1, .prose-finpilot h2, .prose-finpilot h3, 
+  .prose-finpilot h4, .prose-finpilot h5 {
+    @apply font-semibold text-foreground mt-6 mb-3;
+  }
+
+  .prose-finpilot h1 { @apply text-2xl; }
+  .prose-finpilot h2 { @apply text-xl; }
+  .prose-finpilot h3 { @apply text-lg; }
+
+  .prose-finpilot p {
+    @apply mb-4 text-muted-foreground;
+  }
+
+  .prose-finpilot ul, .prose-finpilot ol {
+    @apply mb-4 pl-6 space-y-1 text-muted-foreground;
+  }
+
+  .prose-finpilot li { @apply list-disc; }
+  .prose-finpilot ol li { @apply list-decimal; }
+
+  .prose-finpilot strong {
+    @apply font-semibold text-foreground;
+  }
+
+  .prose-finpilot code {
+    @apply bg-secondary px-1.5 py-0.5 rounded text-xs font-mono text-primary;
+  }
+
+  .prose-finpilot pre {
+    @apply bg-secondary rounded-lg p-4 overflow-x-auto mb-4;
+  }
+
+  .prose-finpilot pre code {
+    @apply bg-transparent p-0 text-foreground;
+  }
+
+  .prose-finpilot table {
+    @apply w-full border-collapse mb-4 text-sm;
+  }
+
+  .prose-finpilot th {
+    @apply bg-secondary px-4 py-2 text-left font-semibold text-foreground border-b border-border;
+  }
+
+  .prose-finpilot td {
+    @apply px-4 py-2 text-muted-foreground border-b border-border/50;
+  }
+
+  .prose-finpilot tr:hover td {
+    @apply bg-secondary/50;
+  }
+
+  .prose-finpilot blockquote {
+    @apply border-l-4 border-primary pl-4 italic text-muted-foreground my-4;
+  }
+
+  .prose-finpilot a {
+    @apply text-primary hover:underline;
+  }
+
+  /* ── React Flow Custom Styles ─────────────────────────────────────────────── */
+
+  .react-flow__node {
+    font-family: Inter, sans-serif;
+  }
+
+  .react-flow__edge-path {
+    stroke: #3b82f6;
+    stroke-width: 2;
+    opacity: 0.7;
+  }
+
+  .react-flow__background {
+    background: #0f172a;
+  }
+
+  .react-flow__controls {
+    background: rgba(30, 41, 59, 0.9) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+    border-radius: 8px !important;
+  }
+
+  .react-flow__controls-button {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.1) !important;
+    color: #94a3b8 !important;
+  }
+}
+
+/* ── Utility Overrides ────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  .border-gradient {
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    background-image: linear-gradient(hsl(var(--card)), hsl(var(--card))),
+                      linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background-origin: border-box;
+  }
+}

@@ -1,0 +1,52 @@
+# ==========================================
+# FinPilot AI — Backend Dockerfile
+# ==========================================
+
+# ── Development Stage ──
+FROM python:3.11-slim AS development
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /app
+
+# Install system dependencies (C++ build tools required for ChromaDB)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 8000
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+# ── Production Stage ──
+FROM python:3.11-slim AS production
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy from builder... (simplified for hackathon)
+COPY requirements.txt .
+RUN apt-get update && apt-get install -y build-essential cmake \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apt-get remove -y build-essential cmake \
+    && apt-get autoremove -y
+
+COPY . .
+
+EXPOSE 8000
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
