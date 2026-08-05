@@ -33,9 +33,15 @@ class DocumentProcessingService:
     """
 
     def __init__(self):
+        import tempfile
         self.vector_service = VectorService()
-        self.upload_dir = Path(settings.UPLOAD_DIR)
-        self.upload_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            self.upload_dir = Path(settings.UPLOAD_DIR)
+            self.upload_dir.mkdir(parents=True, exist_ok=True)
+        except Exception as e:
+            logger.warning(f"Could not create upload_dir '{settings.UPLOAD_DIR}': {e}. Falling back to tempdir.")
+            self.upload_dir = Path(tempfile.gettempdir()) / "finpilot_uploads"
+            self.upload_dir.mkdir(parents=True, exist_ok=True)
 
     def validate_file(self, filename: str, file_size: int, content_type: str) -> None:
         """
