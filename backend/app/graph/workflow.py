@@ -319,7 +319,7 @@ async def run_finpilot_pipeline(
             state["final_response"] = (
                 "### 📄 Financial Due Diligence Synthesis\n\n"
                 "Multi-agent analysis completed based on active document context.\n"
-                "- **Status**: 17 AI Agents finished analysis pipeline.\n"
+                "- **Status**: 5 AI Agents finished analysis pipeline.\n"
                 "- **Recommendation**: Review active document section inspector for details."
             )
         return state

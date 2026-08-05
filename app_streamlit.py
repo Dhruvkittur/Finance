@@ -267,7 +267,7 @@ if st.session_state["active_page"] == "Dashboard":
             """
             <div class="metric-card">
                 <div class="metric-title">Active AI Workforce</div>
-                <div class="metric-value">17 Agents</div>
+                <div class="metric-value">5 Agents</div>
                 <div class="metric-delta delta-up">● LangGraph Pipeline Ready</div>
             </div>
             """,

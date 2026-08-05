@@ -246,7 +246,7 @@ class LLMService:
         report_sections = []
         report_sections.append(f"# Executive Financial Due Diligence & Multi-Agent Audit Report\n")
         report_sections.append(f"**Target Objective / Query:** {query}")
-        report_sections.append(f"**Analysis Date:** {time.strftime('%Y-%m-%d')} | **AI Workforce:** 17 Autonomous Agents\n")
+        report_sections.append(f"**Analysis Date:** {time.strftime('%Y-%m-%d')} | **AI Workforce:** 5 Autonomous Agents\n")
         report_sections.append("---\n")
 
         if context and context != "No relevant document context available.":
