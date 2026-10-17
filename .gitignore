@@ -1,0 +1,11 @@
+.gradle/
+*/.gradle/
+android-app/.gradle/
+android-app/build/
+android-app/app/build/
+cloudflared.exe
+node_modules/
+package-lock.json
+*.log
+deploy.js
+CNAME
